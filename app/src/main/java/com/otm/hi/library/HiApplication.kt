@@ -14,7 +14,7 @@ class HiApplication: Application() {
         super.onCreate()
         HiLogManager.init(object : HiLogConfig(){
             override fun getGlobalTag(): String {
-                return "HiApplication"
+                return "HiApplication Test"
             }
 
             override fun enable(): Boolean {
