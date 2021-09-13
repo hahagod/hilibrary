@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import com.otm.hi.library.R
 import com.otm.hi.library.log.HiLog
+import com.otm.hi.library.log.HiLogConfig
+import com.otm.hi.library.log.HiLogType
 
 class HiLogDemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,6 +18,16 @@ class HiLogDemoActivity : AppCompatActivity() {
     }
 
     private fun printLog(){
+        //自定义log配置
+        HiLog.log(object : HiLogConfig(){
+            override fun includeThread(): Boolean {
+                return true
+            }
+
+            override fun statckTraceDepth(): Int {
+                return 0
+            }
+        }, HiLogType.E, "-----", "5566")
         HiLog.a("9900")
     }
 }
