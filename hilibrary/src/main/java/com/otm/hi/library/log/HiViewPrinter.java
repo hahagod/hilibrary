@@ -1,11 +1,14 @@
 package com.otm.hi.library.log;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.otm.hi.library.R;
@@ -19,16 +22,42 @@ import java.util.List;
  * Desc:
  */
 public class HiViewPrinter implements HiLogPrinter {
+
+    private RecyclerView recyclerView;
+    private LogAdapter adapter;
+
+    public HiViewPrinterProvider getViewProvider() {
+        return viewProvider;
+    }
+
+    private HiViewPrinterProvider viewProvider;
+
+    public HiViewPrinter(Activity activity) {
+        FrameLayout rootView = activity.findViewById(android.R.id.content);
+        recyclerView = new RecyclerView(activity);
+        adapter = new LogAdapter(LayoutInflater.from(recyclerView.getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(recyclerView.getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        viewProvider = new HiViewPrinterProvider(rootView, recyclerView);
+
+    }
+
     @Override
     public void print(@NonNull HiLogConfig config, int level, String tag,
                       @NonNull String printString) {
-
+        adapter.addItem(new HiLogMo(System.currentTimeMillis(), level, tag, printString));
+        recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
     }
 
     private static class LogAdapter extends RecyclerView.Adapter<LogViewHolder> {
 
         private LayoutInflater inflater;
         private List<HiLogMo> logs = new ArrayList<>();
+
+        LogAdapter(LayoutInflater inflater) {
+            this.inflater = inflater;
+        }
 
         @NonNull
         @Override
@@ -81,7 +110,7 @@ public class HiViewPrinter implements HiLogPrinter {
 
         @Override
         public int getItemCount() {
-            return 0;
+            return logs.size();
         }
     }
 
@@ -91,8 +120,8 @@ public class HiViewPrinter implements HiLogPrinter {
 
         public LogViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTag = itemView.findViewWithTag(R.id.tag);
-            tvMessage = itemView.findViewWithTag(R.id.message);
+            tvTag = itemView.findViewById(R.id.tag);
+            tvMessage = itemView.findViewById(R.id.message);
         }
     }
 }

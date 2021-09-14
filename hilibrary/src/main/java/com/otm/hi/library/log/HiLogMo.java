@@ -1,6 +1,7 @@
 package com.otm.hi.library.log;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Author: zhuyongqiang
