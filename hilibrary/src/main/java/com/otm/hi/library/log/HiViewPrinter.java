@@ -124,4 +124,10 @@ public class HiViewPrinter implements HiLogPrinter {
             tvMessage = itemView.findViewById(R.id.message);
         }
     }
+
+    public List<Integer> find() {
+        for(int i=200; i<=300; i++) {
+            if()
+        }
+    }
 }
